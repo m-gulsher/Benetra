@@ -1,0 +1,39 @@
+<header class="bg-white shadow py-4 px-6">
+  <div class="flex justify-between items-center">
+    <button class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full focus:outline-none" onclick="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="w-10 h-10 rounded-full overflow-hidden border border-gray-300">
+      <%= image_tag "sc_avatar.png", class: "w-full h-full object-cover" %>
+    </div>
+
+    <% if user_signed_in? %>
+      <div class="flex items-center space-x-4 relative">
+        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-full focus:outline-none">
+          <span class="material-icons-outlined"><i class="bi bi-question-circle"></i></span>
+        </button>
+
+        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-full focus:outline-none">
+          <span class="material-icons-outlined"><i class="bi bi-bell"></i></span>
+          <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+        </button>
+
+        <div class="relative" data-controller= "dropdown">
+          <button data-action="click->dropdown#toggle" class="w-10 h-10 rounded-full overflow-hidden border border-gray-300 focus:outline-none">
+            <%= image_tag "sc_avatar.png", class: "w-full h-full object-cover" %>
+          </button>
+          
+          <div data-dropdown-target="menu" class="absolute right-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 w-48 hidden">
+            <%= link_to "#", class: "block px-4 py-2 text-gray-600 hover:bg-gray-100" do %>
+              <i class="bi bi-gear mr-2"></i> Settings
+            <% end %>
+            <%= button_to destroy_user_session_path, method: :delete, class: "block px-4 py-2 text-gray-600 hover:bg-gray-100" do %>
+              <i class="bi bi-box-arrow-right mr-2"></i> Sign out
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</header>
