@@ -5,4 +5,12 @@ class Agent < ApplicationRecord
 
   validates :name, :email, presence: true
   validates :email, uniqueness: true
+  after_create :set_as_authenticatable_for_user
+
+  private
+
+  # Set this agent as the authenticatable for the user
+  def set_as_authenticatable_for_user
+    user.update(authenticatable_type: 'Agent', authenticatable_id: self.id)
+  end
 end
