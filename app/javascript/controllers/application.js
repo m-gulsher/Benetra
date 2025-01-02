@@ -1,6 +1,15 @@
 import { Application } from "@hotwired/stimulus"
 
-const application = Application.start()
+class StoringApplication extends Application {
+  storedControllers = {}
+
+  register(identifier, controllerConstructor) {
+    super.register(identifier, controllerConstructor)
+    this.storedControllers[identifier] = controllerConstructor
+  }
+}
+
+const application = StoringApplication.start()
 
 // Configure Stimulus development experience
 application.debug = false

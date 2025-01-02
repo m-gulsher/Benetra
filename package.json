@@ -1,5 +1,17 @@
 {
   "dependencies": {
-    "bootstrap": "^5.3.3"
-  }
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo-rails": "^8.0.12",
+    "bootstrap": "^5.3.3",
+    "esbuild": "0.x",
+    "rails-ujs": "^5.2.8-1",
+    "sass": "^1.83.0",
+    "@popperjs/core": "^2.10.1"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --target=es2021 --bundle --minify --sourcemap --outdir=app/assets/builds",
+    "build-dev": "esbuild app/javascript/*.* --target=es2021 --bundle --sourcemap --outdir=app/assets/builds",
+    "build:css": "sass ./app/assets/stylesheets/:./app/assets/builds/ --load-path=node_modules"
+}
+
 }
