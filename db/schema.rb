@@ -10,8 +10,88 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_02_002131) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
+  create_table "admins", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_admins_on_user_id"
+  end
+
+  create_table "agencies", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "phone"
+    t.string "poc_email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "agents", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.bigint "agency_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["agency_id"], name: "index_agents_on_agency_id"
+    t.index ["user_id"], name: "index_agents_on_user_id"
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "phone"
+    t.string "poc_email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "phone"
+    t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["company_id"], name: "index_employees_on_company_id"
+    t.index ["user_id"], name: "index_employees_on_user_id"
+  end
+
+  create_table "policies", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.bigint "company_id", null: false
+    t.bigint "agent_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_policies_on_agent_id"
+    t.index ["company_id"], name: "index_policies_on_company_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: ""
+    t.string "role", null: false
+    t.string "authenticatable_type"
+    t.bigint "authenticatable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authenticatable_type", "authenticatable_id"], name: "index_users_on_authenticatable"
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  add_foreign_key "admins", "users"
+  add_foreign_key "agents", "agencies"
+  add_foreign_key "agents", "users"
+  add_foreign_key "employees", "companies"
+  add_foreign_key "employees", "users"
+  add_foreign_key "policies", "agents"
+  add_foreign_key "policies", "companies"
 end
