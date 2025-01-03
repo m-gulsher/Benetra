@@ -1,11 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+one:
+  name: "Alice Johnson"
+  email: "alice.johnson@techinnovators.com"
+  phone: "555-123-4567"
+  company_id: 1
+  user_id: 1
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+two:
+  name: "Bob Smith"
+  email: "bob.smith@greensolutions.com"
+  phone: "555-987-6543"
+  company_id: 2
+  user_id: 2
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>

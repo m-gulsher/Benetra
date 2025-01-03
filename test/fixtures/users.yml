@@ -1,6 +1,12 @@
-# test/fixtures/users.yml
 one:
+  id: 1
   name: "John Doe"
   email: "john@example.com"
-  encrypted_password: "<%= BCrypt::Password.create('password') %>"
+  encrypted_password: "password"
+  role: "admin"
+two:
+  id: 2
+  name: "Jane Doe"
+  email: "jane@example.com"
+  encrypted_password: "password"
   role: "admin"
