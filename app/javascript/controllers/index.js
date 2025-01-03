@@ -10,5 +10,11 @@ application.register("dropdown", DropdownController)
 import NestedAgents from "./nested_agents_controller"
 application.register("nested-agents", NestedAgents)
 
+import NestedEmployees from "./nested_employees_controller"
+application.register("nested-employees", NestedEmployees)
+
+import NestedPolicies from "./nested_policies_controller"
+application.register("nested-policies", NestedPolicies)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)

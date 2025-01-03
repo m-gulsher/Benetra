@@ -1,0 +1,14 @@
+<h1>Welcome Back to the Ichra!</h1>
+
+<p>Hi <%= @user.name %>,</p>
+
+<p>We're glad to remind you that you can manage your agency on our platform. If you need to log in, simply use your credentials:</p>
+
+<ul>
+  <li>Email: <%= @user.email %></li>
+</ul>
+
+<p>Click the link below to log in:</p>
+<p><%= link_to "Login", @url %></p>
+
+<p>Best regards,<br>Ichra Team</p>

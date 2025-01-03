@@ -1,6 +1,6 @@
 class Employee < ApplicationRecord
-  belongs_to :company
-  has_one :user, as: :authenticatable, dependent: :destroy, required: false
+  belongs_to :company, required: false
+  has_one :user, as: :authenticatable, required: false
   accepts_nested_attributes_for :user
 
   validates :name, :email, presence: true

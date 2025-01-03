@@ -10,22 +10,13 @@ class User < ApplicationRecord
 
   validates :role, inclusion: { in: ROLES }
 
-  after_create :assign_role
+  after_create :create_admin
 
   private
 
-  def assign_role
-    case role
-    when "admin"
-      create_admin
-    when "agent"
-      create_agent
-    when "employee"
-      create_employee
-    end
-  end
-
   def create_admin
+    return unless role == "admin"
+
     Admin.create(email: email, name: name, user: self)
   end
 
@@ -34,6 +25,7 @@ class User < ApplicationRecord
   end
 
   def create_employee
-    Employee.create(email: email, name: name, user: self)
+    employee = Employee.create(email: email, name: name, user_id: self.id)
+    self.update(authenticatable_type: "Employee", authenticatable_id: employee.id)
   end
 end
