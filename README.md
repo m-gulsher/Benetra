@@ -1,4 +1,4 @@
-# README
+# README Carefully
 
 Overview:
 The Insurance Management Platform streamlines the relationship between health insurance companies, brokers, HR representatives, and employees. It offers tools for managing policies, employee enrollments, and communications with a focus on efficiency and ease of use.
@@ -69,3 +69,5 @@ Frontend Integration
 Note: 
 
 To use employee importer please user sample csv place here: "app/assets/sample_employees.csv"
+
+## Thanks ##
