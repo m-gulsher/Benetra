@@ -16,11 +16,11 @@ class User < ApplicationRecord
 
   def assign_role
     case role
-    when 'admin'
+    when "admin"
       create_admin
-    when 'agent'
+    when "agent"
       create_agent
-    when 'employee'
+    when "employee"
       create_employee
     end
   end

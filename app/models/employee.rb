@@ -11,8 +11,8 @@ class Employee < ApplicationRecord
   private
 
   def set_as_authenticatable_for_user
-    return unless user 
+    return unless user
 
-    user.update(authenticatable_type: 'Employee', authenticatable_id: self.id)
+    user.update(authenticatable_type: "Employee", authenticatable_id: self.id)
   end
 end
