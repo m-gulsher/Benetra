@@ -1,0 +1,88 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="" id="notice"><%= notice %></p>
+  <% end %>
+
+  <% content_for :title, "Agents" %>
+
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">
+      <span class="mr-2 text-4xl"><i class="bi bi-file-person"></i></span>
+      Agents
+    </h1>
+    <%= link_to new_agent_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
+      <span class="mr-2 text-xl">+</span>
+      Add Agent
+    <% end %>
+  </div>
+
+  <div class="bg-white mt-6 py-2 px-4 flex justify-between items-center">
+    <span class="text-sm text-gray-500">
+      <i class="bi bi-clock mr-2"></i>
+      Pending Invitations
+    </span>
+    <span class="text-lg font-semibold">4</span>
+  </div>
+
+  <div class="mt-6 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+      <div class="relative">
+        <select id="status" class="block w-32 py-2 px-3 bg-gray-100 border border-gray-300 rounded-md text-sm appearance-none text-center">
+          <option value="" disabled selected hidden>Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="pending">Pending</option>
+        </select>
+        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+          <i class="bi bi-star"></i>
+        </span>
+        <i class="bi bi-chevron-down absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+      </div>
+    </div>
+
+    <div class="flex items-center">
+      <div class="relative w-48">
+        <span class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+          <i class="bi bi-search"></i>
+        </span>
+        <input
+          type="text"
+          class="w-full pl-9 py-2 px-3 bg-gray-100 border border-gray-300 rounded-md text-sm"
+          placeholder="Search"
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 overflow-x-auto"> <!-- Add overflow-x-auto here to allow horizontal scroll -->
+    <table class="w-full min-w-max border border-collapse table-auto"> <!-- Ensure the table has a min-width -->
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-4 py-2 text-left">Name</th>
+          <th class="border px-4 py-2 text-left">Email</th>
+          <th class="border px-4 py-2 text-left">Agency Name</th>
+          <th class="border px-4 py-2 text-left">No. of Policies</th>
+          <th class="border px-4 py-2 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @agents.each do |agent| %>
+          <tr class="hover:bg-gray-50">
+            <td class="border px-4 py-2"><%= agent.name %></td>
+            <td class="border px-4 py-2"><%= agent.email %></td>
+            <td class="border px-4 py-2"><%= agent.agency.present? ? agent.agency.name : "No Agency Yet" %></td>
+            <td class="border px-4 py-2"><%= agent.policies.count %></td>
+            <td class="border px-4 py-2 text-center flex justify-start items-center">
+              <%= link_to edit_agent_path(agent), class: "text-gray-500 hover:text-gray-700 mr-3", title: "Edit" do %>
+                <i class="bi bi-pencil"></i>
+              <% end %>
+              <%= button_to agent_path(agent), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-gray-500 hover:text-gray-700", title: "Delete" do %>
+                <i class="bi bi-trash"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
