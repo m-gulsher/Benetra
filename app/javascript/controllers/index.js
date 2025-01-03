@@ -7,5 +7,8 @@ import { application } from "./application"
 import DropdownController from "./dropdown_controller"
 application.register("dropdown", DropdownController)
 
+import NestedAgents from "./nested_agents_controller"
+application.register("nested-agents", NestedAgents)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
