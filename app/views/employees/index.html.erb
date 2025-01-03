@@ -10,6 +10,10 @@
       <span class="mr-2 text-4xl"><i class="bi bi-people"></i></span>
       Employees
     </h1>
+    <%= link_to import_employees_path, class: "rounded-lg py-3 px-5 bg-green-500 text-white block font-medium" do %>
+        <span class="mr-2 text-xl"><i class="bi bi-upload"></i></span>
+        Import Employees
+    <% end %>
     <%= link_to new_employee_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
       <span class="mr-2 text-xl">+</span>
       Add Employee
