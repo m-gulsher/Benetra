@@ -1,4 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  skip_before_action :check_logged_in?
+
   def create
     @user = User.new(user_params)
 

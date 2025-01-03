@@ -1,13 +1,10 @@
 <div class="w-full">
-  <% if notice.present? %>
-    <p class="" id="notice"><%= notice %></p>
-  <% end %>
 
   <% content_for :title, "Companies" %>
 
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">
-      <span class="mr-2 text-4xl"><i class="bi bi-file-person"></i></span>
+      <span class="mr-2 text-4xl"><i class="bi bi-building text-lg"></i></span>
       Companies
     </h1>
     <%= link_to new_company_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
