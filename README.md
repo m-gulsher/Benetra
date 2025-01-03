@@ -65,3 +65,7 @@ Frontend Integration
 
   1.TailwindCSS: Used for streamlined and modern frontend styling.
   2.StimulusJS: JavaScript functionality for enhanced user interaction, particularly for table operations.
+
+Note: 
+
+To use employee importer please user sample csv place here: "app/assets/sample_employees.csv"

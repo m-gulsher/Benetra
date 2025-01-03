@@ -1,7 +1,7 @@
 class Agent < ApplicationRecord
-  belongs_to :agency
-  has_one :user, as: :authenticatable, dependent: :destroy, required: false
-  has_many :policies
+  belongs_to :agency, optional: true
+  has_one :user, as: :authenticatable, required: false
+  has_many :policies, dependent: :destroy
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :policies
 
