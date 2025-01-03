@@ -19,13 +19,4 @@ class User < ApplicationRecord
 
     Admin.create(email: email, name: name, user: self)
   end
-
-  def create_agent
-    Agent.create(email: email, name: name, user: self)
-  end
-
-  def create_employee
-    employee = Employee.create(email: email, name: name, user_id: self.id)
-    self.update(authenticatable_type: "Employee", authenticatable_id: employee.id)
-  end
 end
