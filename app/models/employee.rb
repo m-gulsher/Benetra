@@ -1,6 +1,6 @@
 class Employee < ApplicationRecord
   belongs_to :company
-  has_one :user, as: :authenticatable, dependent: :destroy
+  has_one :user, as: :authenticatable, dependent: :destroy, required: false
   accepts_nested_attributes_for :user
 
   validates :name, :email, presence: true
@@ -11,6 +11,8 @@ class Employee < ApplicationRecord
   private
 
   def set_as_authenticatable_for_user
+    return unless user 
+
     user.update(authenticatable_type: 'Employee', authenticatable_id: self.id)
   end
 end

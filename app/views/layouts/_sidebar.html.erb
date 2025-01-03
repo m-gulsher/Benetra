@@ -5,10 +5,11 @@
       <span class="material-icons-outlined mr-2"><i class="bi bi-columns-gap"></i></span>
       Dashboard
     </a>
-    <a href="#" class="flex items-center text-black hover:bg-gray-100 rounded p-2">
+    <%= link_to agencies_path, class: "flex items-center text-black hover:bg-gray-100 rounded p-2" do %>
       <span class="material-icons-outlined mr-2"><i class="bi bi-person"></i></span>
       Agencies
-    </a>
+    <% end %>
+
     <a href="#" class="flex items-center text-black hover:bg-gray-100 rounded p-2">
       <span class="material-icons-outlined mr-2"><i class="bi bi-person-circle"></i></span>
       Agents

@@ -53,6 +53,7 @@ group :development, :test do
   gem "byebug" 
   gem "foreman"
   gem "listen"
+  gem "letter_opener"
 end
 
 group :development do
