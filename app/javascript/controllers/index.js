@@ -16,5 +16,8 @@ application.register("nested-employees", NestedEmployees)
 import NestedPolicies from "./nested_policies_controller"
 application.register("nested-policies", NestedPolicies)
 
+import ImportProgressController from "./import_progress_controller"
+application.register("import-progress", ImportProgressController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)

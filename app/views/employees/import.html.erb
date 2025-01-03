@@ -1,0 +1,15 @@
+<div class="container mx-auto my-10" data-controller="import-progress">
+  <h1 class="text-xl font-bold mb-4">Import Employees</h1>
+  <%= form_with url: import_csv_employees_path, multipart: true, method: :post, class: "space-y-4" do |form| %>
+    <%= form.file_field :file, class: "block w-full border rounded p-2" %>
+    <%= form.submit "Upload", class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" %>
+  <% end %>
+
+  <div id="progress-bar" class="relative mt-4 w-full h-4 bg-gray-200 rounded">
+    <div data-import-progress-target="progressBar"
+         class="absolute top-0 left-0 h-4 bg-blue-500 rounded transition-all" style="width: 0%;">
+    </div>
+  </div>
+
+  <ul data-import-progress-target="messages" class="mt-4 space-y-2 text-sm"></ul>
+</div>
