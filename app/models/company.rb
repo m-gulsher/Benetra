@@ -3,4 +3,35 @@ class Company < ApplicationRecord
   has_many :policies, dependent: :destroy
 
   validates :name, :email, :poc_email, presence: true
+
+  accepts_nested_attributes_for :employees, allow_destroy: true
+  accepts_nested_attributes_for :policies, allow_destroy: true
+
+  after_create :create_user_with_poc_email
+
+  private
+
+  def create_user_with_poc_email
+    existing_user = User.find_by(email: poc_email)
+
+    if existing_user
+      UserMailer.reminder_email(existing_user).deliver_later
+    else
+      first_part_of_email = poc_email.split("@").first
+      random_password = SecureRandom.hex(8)
+      user = User.new(
+        email: poc_email,
+        name: first_part_of_email.capitalize,
+        password: random_password,
+        role: "employee"
+      )
+
+      if user.save
+        employee = Employee.create(email: email, name: name, user_id: user.id, company_id: self.id)
+        user.update(authenticatable_type: "Employee", authenticatable_id: employee.id)
+
+        UserMailer.welcome_email(user, first_part_of_email.capitalize, random_password).deliver_later
+      end
+    end
+  end
 end

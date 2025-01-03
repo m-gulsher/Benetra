@@ -60,7 +60,7 @@ class AgenciesController < ApplicationController
 
   def agency_params
     params.require(:agency).permit(
-      :name, :email, :phone, :poc_email, :no_of_agents,
+      :name, :email, :phone, :poc_email,
       agents_attributes: [ :id, :name, :email, :_destroy ]
     )
   end

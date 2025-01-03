@@ -9,14 +9,26 @@ class Agency < ApplicationRecord
   private
 
   def create_user_with_poc_email
-    first_part_of_email = poc_email.split("@").first
-    random_password = SecureRandom.hex(8)
-    user = User.create(
-      email: poc_email,
-      name: first_part_of_email.capitalize,
-      password: random_password,
-      role: "agent"
-    )
-    UserMailer.welcome_email(user, name, random_password).deliver_later
+    existing_user = User.find_by(email: poc_email)
+
+    if existing_user
+      UserMailer.reminder_email(existing_user).deliver_later
+    else
+      first_part_of_email = poc_email.split("@").first
+      random_password = SecureRandom.hex(8)
+      user = User.new(
+        email: poc_email,
+        name: first_part_of_email.capitalize,
+        password: random_password,
+        role: "agent"
+      )
+
+      if user.save
+        agent = Agent.create(email: email, name: name, user_id: user.id, agency_id: self.id)
+        user.update(authenticatable_type: "Agent", authenticatable_id: agent.id)
+
+        UserMailer.welcome_email(user, first_part_of_email.capitalize, random_password).deliver_later
+      end
+    end
   end
 end
