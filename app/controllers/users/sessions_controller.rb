@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
+  skip_before_action :check_logged_in?
+
   # def new
   #   respond_to do |format|
   #     format.html { super }

@@ -1,23 +1,22 @@
 <div class="w-full">
-  <% if notice.present? %>
-    <p class="" id="notice"><%= notice %></p>
-  <% end %>
 
   <% content_for :title, "Employees" %>
 
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">
-      <span class="mr-2 text-4xl"><i class="bi bi-people"></i></span>
+      <span class="mr-2 text-4xl"><i class="bi bi-person-circle text-lg"></i></span>
       Employees
     </h1>
-    <%= link_to import_employees_path, class: "rounded-lg py-3 px-5 bg-green-500 text-white block font-medium" do %>
-        <span class="mr-2 text-xl"><i class="bi bi-upload"></i></span>
-        Import Employees
-    <% end %>
-    <%= link_to new_employee_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
-      <span class="mr-2 text-xl">+</span>
-      Add Employee
-    <% end %>
+    <div class="flex justify-between items-center">
+      <%= link_to import_employees_path, class: "rounded-lg py-3 px-5 bg-green-500 text-white block font-medium mr-4" do %>
+          <span class="mr-2 text-xl"><i class="bi bi-upload"></i></span>
+          Import Employees
+      <% end %>
+      <%= link_to new_employee_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
+        <span class="mr-2 text-xl">+</span>
+        Add Employee
+      <% end %>
+    </div>
   </div>
 
   <div class="bg-white mt-6 py-2 px-4 flex justify-between items-center">
