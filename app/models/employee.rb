@@ -1,5 +1,5 @@
 class Employee < ApplicationRecord
-  belongs_to :company, required: false
+  belongs_to :company, optional: true
   has_one :user, as: :authenticatable, required: false
   accepts_nested_attributes_for :user
 
