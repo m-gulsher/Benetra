@@ -28,7 +28,7 @@
       <% flash.each do |type, message| %>
         <div class="<%= flash_class(type) %>" id="flash-message" style="position: relative;">
           <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none" onclick="closeFlashMessage(this)">
-            <i class="bi bi-x"></i> <!-- Close button icon -->
+            <i class="bi bi-x"></i>
           </button>
           <%= message %>
         </div>
@@ -37,7 +37,7 @@
     <div class="flex flex-1">
 
       <% if user_signed_in? %>
-        <aside id="sidebar" class="bg-white w-64 border-r border-gray-200 h-full lg:block hidden">
+        <aside id="sidebar" class="bg-white w-64 border-r border-gray-200 lg:block hidden">
           <%= render "layouts/sidebar" %>
         </aside>
       <% else %>
