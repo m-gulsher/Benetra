@@ -13,8 +13,8 @@ class Users::SessionsController < Devise::SessionsController
       if resource.invalid?
         # If invalid, return a turbo stream with the form and the errors
         render turbo_stream: turbo_stream.replace(
-          'session_form', 
-          partial: 'users/sessions/form', 
+          "session_form",
+          partial: "users/sessions/form",
           locals: { resource: resource }
         )
         return
@@ -29,9 +29,8 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   private
-  
+
   def configure_sign_in_params
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [ :email, :password ])
   end
 end
-

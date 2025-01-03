@@ -50,7 +50,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  gem "byebug" 
+  gem "byebug"
   gem "foreman"
   gem "listen"
   gem "letter_opener"

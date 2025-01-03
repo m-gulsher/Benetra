@@ -7,8 +7,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       redirect_to after_sign_up_path_for(@user), status: :see_other
     else
       render turbo_stream: turbo_stream.replace(
-        'registration_form',
-        partial: 'users/registrations/form',
+        "registration_form",
+        partial: "users/registrations/form",
         locals: { user: @user }
       )
     end
