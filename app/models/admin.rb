@@ -10,6 +10,6 @@ class Admin < ApplicationRecord
   private
 
   def set_as_authenticatable_for_user
-    user.update(authenticatable_type: 'Admin', authenticatable_id: self.id)
+    user.update(authenticatable_type: "Admin", authenticatable_id: self.id)
   end
 end
