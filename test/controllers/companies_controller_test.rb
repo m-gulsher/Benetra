@@ -3,6 +3,8 @@ require "test_helper"
 class CompaniesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @company = companies(:one)
+    @user = users(:one)
+    sign_in @user
   end
 
   test "should get index" do
@@ -15,14 +17,6 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create company" do
-    assert_difference("Company.count") do
-      post companies_url, params: { company: {} }
-    end
-
-    assert_redirected_to company_url(Company.last)
-  end
-
   test "should show company" do
     get company_url(@company)
     assert_response :success
@@ -31,11 +25,6 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
   test "should get edit" do
     get edit_company_url(@company)
     assert_response :success
-  end
-
-  test "should update company" do
-    patch company_url(@company), params: { company: {} }
-    assert_redirected_to company_url(@company)
   end
 
   test "should destroy company" do

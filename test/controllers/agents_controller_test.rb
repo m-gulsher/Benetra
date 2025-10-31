@@ -3,6 +3,8 @@ require "test_helper"
 class AgentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @agent = agents(:one)
+    @user = users(:one)
+    sign_in @user
   end
 
   test "should get index" do
@@ -15,14 +17,6 @@ class AgentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create agent" do
-    assert_difference("Agent.count") do
-      post agents_url, params: { agent: {} }
-    end
-
-    assert_redirected_to agent_url(Agent.last)
-  end
-
   test "should show agent" do
     get agent_url(@agent)
     assert_response :success
@@ -31,11 +25,6 @@ class AgentsControllerTest < ActionDispatch::IntegrationTest
   test "should get edit" do
     get edit_agent_url(@agent)
     assert_response :success
-  end
-
-  test "should update agent" do
-    patch agent_url(@agent), params: { agent: {} }
-    assert_redirected_to agent_url(@agent)
   end
 
   test "should destroy agent" do

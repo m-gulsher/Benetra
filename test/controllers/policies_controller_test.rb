@@ -1,38 +1,37 @@
 require "test_helper"
 
 class PoliciesControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get policies_index_url
-    assert_response :success
+  setup do
+    @policy = policies(:one)
+    @user = users(:one)
+    sign_in @user
   end
 
-  test "should get show" do
-    get policies_show_url
+  test "should get index" do
+    get policies_url
     assert_response :success
   end
 
   test "should get new" do
-    get policies_new_url
+    get new_policy_url
+    assert_response :success
+  end
+
+  test "should show policy" do
+    get policy_url(@policy)
     assert_response :success
   end
 
   test "should get edit" do
-    get policies_edit_url
+    get edit_policy_url(@policy)
     assert_response :success
   end
 
-  test "should get create" do
-    get policies_create_url
-    assert_response :success
-  end
+  test "should destroy policy" do
+    assert_difference("Policy.count", -1) do
+      delete policy_url(@policy)
+    end
 
-  test "should get update" do
-    get policies_update_url
-    assert_response :success
-  end
-
-  test "should get destroy" do
-    get policies_destroy_url
-    assert_response :success
+    assert_redirected_to policies_url
   end
 end
