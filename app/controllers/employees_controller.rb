@@ -2,7 +2,28 @@ class EmployeesController < ApplicationController
   before_action :set_employee, only: %i[ show edit update destroy ]
 
   def index
-    @employees = Employee.all
+    search_term = params[:search]&.strip
+    company_id = params[:company_id]
+    page = params[:page] || 1
+    per_page = params[:per_page] || 20
+
+    @employees = Employee.search_and_filter(
+      search_term,
+      { company_id: company_id },
+      :name,
+      :email,
+      :phone
+    )
+
+    @total_count = @employees.count
+    @total_pages = @employees.total_pages(per_page: per_page.to_i)
+    @employees = @employees.paginated(page: page, per_page: per_page)
+
+    @companies = Company.all.order(:name)
+    @current_search = search_term
+    @current_company_id = company_id
+    @current_page = page.to_i
+    @per_page = per_page.to_i
   end
 
   def show

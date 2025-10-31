@@ -1,6 +1,11 @@
 class Agency < ApplicationRecord
+  include Searchable
+  include EmailValidatable
+
   has_many :agents, dependent: :destroy
   validates :name, :email, :poc_email, presence: true
+  validates :email, format: { with: EmailValidatable::EMAIL_REGEX, message: "must be a valid email address" }
+  validates :poc_email, format: { with: EmailValidatable::EMAIL_REGEX, message: "must be a valid email address" }
 
   accepts_nested_attributes_for :agents, allow_destroy: true
 

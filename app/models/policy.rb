@@ -1,4 +1,6 @@
 class Policy < ApplicationRecord
+  include Searchable
+
   belongs_to :company, optional: true
   belongs_to :agent, optional: true
 

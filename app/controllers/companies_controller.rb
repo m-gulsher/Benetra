@@ -2,7 +2,25 @@ class CompaniesController < ApplicationController
   before_action :set_company, only: %i[ show edit update destroy ]
 
   def index
-    @companies = Company.all
+    search_term = params[:search]&.strip
+    page = params[:page] || 1
+    per_page = params[:per_page] || 20
+
+    @companies = Company.search_and_filter(
+      search_term,
+      {},
+      :name,
+      :email,
+      :poc_email
+    )
+
+    @total_count = @companies.count
+    @total_pages = @companies.total_pages(per_page: per_page.to_i)
+    @companies = @companies.paginated(page: page, per_page: per_page)
+
+    @current_search = search_term
+    @current_page = page.to_i
+    @per_page = per_page.to_i
   end
 
   def show
