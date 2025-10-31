@@ -1,8 +1,13 @@
 class Company < ApplicationRecord
+  include Searchable
+  include EmailValidatable
+
   has_many :employees, dependent: :destroy
   has_many :policies, dependent: :destroy
 
   validates :name, :email, :poc_email, presence: true
+  validates :email, format: { with: EmailValidatable::EMAIL_REGEX, message: "must be a valid email address" }
+  validates :poc_email, format: { with: EmailValidatable::EMAIL_REGEX, message: "must be a valid email address" }
 
   accepts_nested_attributes_for :employees, allow_destroy: true
   accepts_nested_attributes_for :policies, allow_destroy: true

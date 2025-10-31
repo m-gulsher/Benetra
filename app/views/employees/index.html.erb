@@ -22,40 +22,36 @@
   <div class="bg-white mt-6 py-2 px-4 flex justify-between items-center">
     <span class="text-sm text-gray-500">
       <i class="bi bi-clock mr-2"></i>
-      Pending Invitations
+      Total Employees
     </span>
-    <span class="text-lg font-semibold"><%= @pending_invitations_count %></span>
+    <span class="text-lg font-semibold"><%= @total_count || Employee.count %></span>
   </div>
 
-  <div class="mt-6 flex justify-between items-center">
+  <%= form_with url: employees_path, method: :get, local: true, class: "mt-6 flex justify-between items-center gap-4" do |f| %>
     <div class="flex items-center space-x-2">
       <div class="relative">
-        <select id="status" class="block w-32 py-2 px-3 bg-gray-100 border border-gray-300 rounded-md text-sm appearance-none text-center">
-          <option value="" disabled selected hidden>Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="pending">Pending</option>
-        </select>
-        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-          <i class="bi bi-star"></i>
-        </span>
-        <i class="bi bi-chevron-down absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+        <%= f.select :company_id, options_from_collection_for_select(@companies, :id, :name, @current_company_id),
+            { include_blank: "All Companies" },
+            { class: "block w-48 py-2 px-3 bg-gray-100 border border-gray-300 rounded-md text-sm" } %>
       </div>
     </div>
 
-    <div class="flex items-center">
-      <div class="relative w-48">
+    <div class="flex items-center gap-2">
+      <div class="relative w-64">
         <span class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500">
           <i class="bi bi-search"></i>
         </span>
-        <input
-          type="text"
-          class="w-full pl-9 py-2 px-3 bg-gray-100 border border-gray-300 rounded-md text-sm"
-          placeholder="Search"
-        >
+        <%= f.text_field :search,
+            value: @current_search,
+            placeholder: "Search by name, email, or phone",
+            class: "w-full pl-9 py-2 px-3 bg-gray-100 border border-gray-300 rounded-md text-sm" %>
       </div>
+      <%= f.submit "Search", class: "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" %>
+      <% if @current_search.present? || @current_company_id.present? %>
+        <%= link_to "Clear", employees_path, class: "px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600" %>
+      <% end %>
     </div>
-  </div>
+  <% end %>
 
   <div class="mt-6 overflow-x-auto">
     <table class="w-full min-w-max border border-collapse table-auto">
@@ -92,4 +88,17 @@
       </tbody>
     </table>
   </div>
+
+  <% if @total_count && @total_count > 0 %>
+    <%= pagination_info(@employees) %>
+    <%= pagination_links(@employees) %>
+  <% else %>
+    <div class="mt-6 text-center text-gray-500">
+      <% if @current_search.present? || @current_company_id.present? %>
+        No employees found matching your search criteria.
+      <% else %>
+        No employees found. <%= link_to "Create one", new_employee_path, class: "text-blue-500 hover:underline" %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
