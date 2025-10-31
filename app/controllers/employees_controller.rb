@@ -76,15 +76,21 @@ class EmployeesController < ApplicationController
 
   def import_results
     errors = Rails.cache.read("employee_import_errors") || []
+    total_rows = EmployeeImportService.total_rows
     results = []
+
+    error_rows = errors.map { |e| e[:row] }.to_set
+    success_rows = (1..total_rows).to_set - error_rows
 
     errors.each do |error|
       results << { row: error[:row], success: false, error: error[:message] }
     end
 
-    (errors.count + 1..EmployeeImportService.total_rows).each do |row|
+    success_rows.each do |row|
       results << { row: row, success: true, error: nil }
     end
+
+    results.sort_by! { |r| r[:row] }
 
     render json: { results: results }
   end
