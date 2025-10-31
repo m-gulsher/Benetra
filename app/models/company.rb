@@ -21,22 +21,27 @@ class Company < ApplicationRecord
 
     if existing_user
       UserMailer.reminder_email(existing_user).deliver_later
-    else
-      first_part_of_email = poc_email.split("@").first
-      random_password = SecureRandom.hex(8)
-      user = User.new(
+      return
+    end
+
+    first_part_of_email = poc_email.split("@").first
+
+    ActiveRecord::Base.transaction do
+      service = UserCreationService.new(
         email: poc_email,
         name: first_part_of_email.capitalize,
-        password: random_password,
-        role: "employee"
+        role: "employee",
+        company_id: id
       )
 
-      if user.save
-        employee = Employee.create(email: email, name: name, user_id: user.id, company_id: self.id)
-        user.update(authenticatable_type: "Employee", authenticatable_id: employee.id)
-
-        UserMailer.welcome_email(user, first_part_of_email.capitalize, random_password).deliver_later
+      unless service.call
+        Rails.logger.error("Failed to create user for company #{id}: #{service.errors.join(', ')}")
+        raise ActiveRecord::Rollback
       end
+    rescue StandardError => e
+      Rails.logger.error("Error in create_user_with_poc_email for company #{id}: #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
+      raise ActiveRecord::Rollback
     end
   end
 end

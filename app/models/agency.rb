@@ -18,22 +18,27 @@ class Agency < ApplicationRecord
 
     if existing_user
       UserMailer.reminder_email(existing_user).deliver_later
-    else
-      first_part_of_email = poc_email.split("@").first
-      random_password = SecureRandom.hex(8)
-      user = User.new(
+      return
+    end
+
+    first_part_of_email = poc_email.split("@").first
+
+    ActiveRecord::Base.transaction do
+      service = UserCreationService.new(
         email: poc_email,
         name: first_part_of_email.capitalize,
-        password: random_password,
-        role: "agent"
+        role: "agent",
+        agency_id: id
       )
 
-      if user.save
-        agent = Agent.create(email: email, name: name, user_id: user.id, agency_id: self.id)
-        user.update(authenticatable_type: "Agent", authenticatable_id: agent.id)
-
-        UserMailer.welcome_email(user, first_part_of_email.capitalize, random_password).deliver_later
+      unless service.call
+        Rails.logger.error("Failed to create user for agency #{id}: #{service.errors.join(', ')}")
+        raise ActiveRecord::Rollback
       end
+    rescue StandardError => e
+      Rails.logger.error("Error in create_user_with_poc_email for agency #{id}: #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
+      raise ActiveRecord::Rollback
     end
   end
 end
