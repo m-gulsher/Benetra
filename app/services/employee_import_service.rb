@@ -23,7 +23,10 @@ class EmployeeImportService
       rows = read_csv_file
       @total_rows = rows.size
 
-      return false if @total_rows.zero?
+      if @total_rows.zero?
+        @errors << "CSV file is empty"
+        return false
+      end
 
       initialize_cache
 

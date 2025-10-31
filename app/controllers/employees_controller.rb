@@ -28,6 +28,7 @@ class EmployeesController < ApplicationController
     @current_company_id = company_id
     @current_page = page.to_i
     @per_page = per_page.to_i
+    @pending_invitations_count = Employee.left_joins(:user).where(users: { id: nil }).count
   end
 
   def show

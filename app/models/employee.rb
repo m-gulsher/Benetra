@@ -17,6 +17,8 @@ class Employee < ApplicationRecord
   def set_as_authenticatable_for_user
     return unless user
 
-    user.update(authenticatable_type: "Employee", authenticatable_id: self.id)
+    unless user.update(authenticatable_type: "Employee", authenticatable_id: self.id)
+      Rails.logger.error("Failed to update user #{user.id} authenticatable for employee #{self.id}: #{user.errors.full_messages.join(', ')}")
+    end
   end
 end
