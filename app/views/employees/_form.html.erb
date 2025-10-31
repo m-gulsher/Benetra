@@ -3,17 +3,40 @@
     <h1 class="text-2xl font-semibold mb-4">
       <%= @employee.new_record? ? "Create Employee" : "Edit Employee" %>
     </h1>
+
+    <% if @employee.errors.any? %>
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+        <h2 class="font-semibold mb-2">
+          <%= pluralize(@employee.errors.count, "error") %> prohibited this employee from being saved:
+        </h2>
+        <ul class="list-disc list-inside">
+          <% @employee.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
     <div class="mb-4">
       <%= f.label :name, "Employee Name", class: "block text-gray-700 font-medium" %>
-      <%= f.text_field :name, class: "mt-1 block w-full p-2 border border-gray-300 rounded-md" %>
+      <%= f.text_field :name, class: "mt-1 block w-full p-2 border #{'border-red-500' if @employee.errors[:name].any?} border-gray-300 rounded-md" %>
+      <% if @employee.errors[:name].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @employee.errors[:name].first %></p>
+      <% end %>
     </div>
     <div class="mb-4">
       <%= f.label :email, "Employee Email", class: "block text-gray-700 font-medium" %>
-      <%= f.email_field :email, class: "mt-1 block w-full p-2 border border-gray-300 rounded-md" %>
+      <%= f.email_field :email, class: "mt-1 block w-full p-2 border #{'border-red-500' if @employee.errors[:email].any?} border-gray-300 rounded-md" %>
+      <% if @employee.errors[:email].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @employee.errors[:email].first %></p>
+      <% end %>
     </div>
     <div class="mb-4">
       <%= f.label :phone, "Employee Phone", class: "block text-gray-700 font-medium" %>
-      <%= f.phone_field :phone, class: "mt-1 block w-full p-2 border border-gray-300 rounded-md" %>
+      <%= f.phone_field :phone, class: "mt-1 block w-full p-2 border #{'border-red-500' if @employee.errors[:phone].any?} border-gray-300 rounded-md" %>
+      <% if @employee.errors[:phone].any? %>
+        <p class="mt-1 text-sm text-red-600"><%= @employee.errors[:phone].first %></p>
+      <% end %>
     </div>
     <% if Company.all.any? %>
       <div class="mb-4">
