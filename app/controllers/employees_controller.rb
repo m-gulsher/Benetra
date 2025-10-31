@@ -1,5 +1,7 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: %i[ show edit update destroy ]
+  before_action :authorize_employee_action!, only: %i[ index show edit update destroy ]
+  before_action :authorize_create!, only: %i[ new create ]
 
   def index
     search_term = params[:search]&.strip
@@ -7,7 +9,8 @@ class EmployeesController < ApplicationController
     page = params[:page] || 1
     per_page = params[:per_page] || 20
 
-    @employees = Employee.search_and_filter(
+    base_scope = EmployeePolicy::Scope.new(current_user, Employee).resolve
+    @employees = base_scope.search_and_filter(
       search_term,
       { company_id: company_id },
       :name,
@@ -19,7 +22,8 @@ class EmployeesController < ApplicationController
     @total_pages = @employees.total_pages(per_page: per_page.to_i)
     @employees = @employees.paginated(page: page, per_page: per_page)
 
-    @companies = Company.all.order(:name)
+    # Set companies for filter dropdown (respecting authorization)
+    @companies = CompanyPolicy::Scope.new(current_user, Company).resolve.order(:name)
     @current_search = search_term
     @current_company_id = company_id
     @current_page = page.to_i
@@ -27,16 +31,20 @@ class EmployeesController < ApplicationController
   end
 
   def show
+    authorize!(:show, @employee)
   end
 
   def new
+    authorize!(:new, Employee)
     @employee = Employee.new
   end
 
   def edit
+    authorize!(:edit, @employee)
   end
 
   def create
+    authorize!(:create, Employee)
     @employee = Employee.new(employee_params)
 
     respond_to do |format|
@@ -51,6 +59,7 @@ class EmployeesController < ApplicationController
   end
 
   def update
+    authorize!(:update, @employee)
     respond_to do |format|
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: "Employee was successfully updated." }
@@ -63,6 +72,7 @@ class EmployeesController < ApplicationController
   end
 
   def destroy
+    authorize!(:destroy, @employee)
     @employee.destroy!
 
     respond_to do |format|
@@ -113,6 +123,16 @@ class EmployeesController < ApplicationController
   private
     def set_employee
       @employee = Employee.find(params.expect(:id))
+    end
+
+    def authorize_employee_action!
+      action = action_name.to_sym
+      resource = action == :index ? Employee : @employee
+      authorize!(action, resource)
+    end
+
+    def authorize_create!
+      authorize!(:create, Employee)
     end
 
     def employee_params

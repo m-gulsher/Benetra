@@ -1,12 +1,15 @@
 class CompaniesController < ApplicationController
   before_action :set_company, only: %i[ show edit update destroy ]
+  before_action :authorize_company_action!, only: %i[ index show edit update destroy ]
+  before_action :authorize_create!, only: %i[ new create ]
 
   def index
     search_term = params[:search]&.strip
     page = params[:page] || 1
     per_page = params[:per_page] || 20
 
-    @companies = Company.search_and_filter(
+    base_scope = CompanyPolicy::Scope.new(current_user, Company).resolve
+    @companies = base_scope.search_and_filter(
       search_term,
       {},
       :name,
@@ -24,18 +27,22 @@ class CompaniesController < ApplicationController
   end
 
   def show
+    authorize!(:show, @company)
   end
 
   def new
+    authorize!(:new, Company)
     @company = Company.new
     @company.employees.build
   end
 
   def edit
+    authorize!(:edit, @company)
     @company.employees.build if @company.employees.empty?
   end
 
   def create
+    authorize!(:create, Company)
     @company = Company.new(company_params)
 
     respond_to do |format|
@@ -50,6 +57,7 @@ class CompaniesController < ApplicationController
   end
 
   def update
+    authorize!(:update, @company)
     respond_to do |format|
       if @company.update(company_params)
         format.html { redirect_to @company, notice: "Company was successfully updated." }
@@ -62,6 +70,7 @@ class CompaniesController < ApplicationController
   end
 
   def destroy
+    authorize!(:destroy, @company)
     @company.destroy!
 
     respond_to do |format|
@@ -73,6 +82,16 @@ class CompaniesController < ApplicationController
   private
     def set_company
       @company = Company.find(params.expect(:id))
+    end
+
+    def authorize_company_action!
+      action = action_name.to_sym
+      resource = action == :index ? Company : @company
+      authorize!(action, resource)
+    end
+
+    def authorize_create!
+      authorize!(:create, Company)
     end
 
     def company_params

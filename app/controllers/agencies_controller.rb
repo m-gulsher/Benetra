@@ -1,23 +1,30 @@
 class AgenciesController < ApplicationController
   before_action :set_agency, only: %i[show edit update destroy]
+  before_action :authorize_agency_action!, only: %i[ index show edit update destroy ]
+  before_action :authorize_create!, only: %i[ new create ]
 
   def index
-    @agencies = Agency.all
+    base_scope = AgencyPolicy::Scope.new(current_user, Agency).resolve
+    @agencies = base_scope
   end
 
   def show
+    authorize!(:show, @agency)
   end
 
   def new
+    authorize!(:new, Agency)
     @agency = Agency.new
     @agency.agents.build
   end
 
   def edit
+    authorize!(:edit, @agency)
     @agency.agents.build if @agency.agents.empty?
   end
 
   def create
+    authorize!(:create, Agency)
     @agency = Agency.new(agency_params)
 
     respond_to do |format|
@@ -32,6 +39,7 @@ class AgenciesController < ApplicationController
   end
 
   def update
+    authorize!(:update, @agency)
     respond_to do |format|
       if @agency.update(agency_params)
         format.html { redirect_to agencies_path, notice: "Agency was successfully updated." }
@@ -44,6 +52,7 @@ class AgenciesController < ApplicationController
   end
 
   def destroy
+    authorize!(:destroy, @agency)
     @agency.destroy
 
     respond_to do |format|
@@ -56,6 +65,16 @@ class AgenciesController < ApplicationController
 
   def set_agency
     @agency = Agency.find(params[:id])
+  end
+
+  def authorize_agency_action!
+    action = action_name.to_sym
+    resource = action == :index ? Agency : @agency
+    authorize!(action, resource)
+  end
+
+  def authorize_create!
+    authorize!(:create, Agency)
   end
 
   def agency_params

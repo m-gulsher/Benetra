@@ -8,13 +8,15 @@
       Employees
     </h1>
     <div class="flex justify-between items-center">
-      <%= link_to import_employees_path, class: "rounded-lg py-3 px-5 bg-green-500 text-white block font-medium mr-4" do %>
-          <span class="mr-2 text-xl"><i class="bi bi-upload"></i></span>
-          Import Employees
-      <% end %>
-      <%= link_to new_employee_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
-        <span class="mr-2 text-xl">+</span>
-        Add Employee
+      <% if can?(:manage, Employee) %>
+        <%= link_to import_employees_path, class: "rounded-lg py-3 px-5 bg-green-500 text-white block font-medium mr-4" do %>
+            <span class="mr-2 text-xl"><i class="bi bi-upload"></i></span>
+            Import Employees
+        <% end %>
+        <%= link_to new_employee_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
+          <span class="mr-2 text-xl">+</span>
+          Add Employee
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -76,11 +78,15 @@
               <% end %>
             </td>
             <td class="border px-4 py-2 text-center flex justify-start items-center">
-              <%= link_to edit_employee_path(employee), class: "text-gray-500 hover:text-gray-700 mr-3", title: "Edit" do %>
-                <i class="bi bi-pencil"></i>
+              <% if can?(:edit, employee) %>
+                <%= link_to edit_employee_path(employee), class: "text-gray-500 hover:text-gray-700 mr-3", title: "Edit" do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
               <% end %>
-              <%= button_to employee_path(employee), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-gray-500 hover:text-gray-700", title: "Delete" do %>
-                <i class="bi bi-trash"></i>
+              <% if can?(:destroy, employee) %>
+                <%= button_to employee_path(employee), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-gray-500 hover:text-gray-700", title: "Delete" do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
               <% end %>
             </td>
           </tr>

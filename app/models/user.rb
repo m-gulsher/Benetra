@@ -12,6 +12,18 @@ class User < ApplicationRecord
 
   after_create :create_admin
 
+  def admin?
+    role == "admin"
+  end
+
+  def agent?
+    role == "agent"
+  end
+
+  def employee?
+    role == "employee"
+  end
+
   private
 
   def create_admin
