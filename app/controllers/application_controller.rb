@@ -1,19 +1,26 @@
 class ApplicationController < ActionController::Base
+  include Authorizable
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
-  before_action :check_logged_in?
+  before_action :authenticate_user!, unless: :devise_controller?
+  before_action :set_pundit_user
 
   def after_sign_in_path_for(resource)
-    return agencies_path if (current_user.role == "admin")
+    return agencies_path if resource.role == "admin"
+    return policies_path if resource.role == "agent"
+    return employees_path if resource.role == "employee"
 
     root_path
   end
 
+  def pundit_user
+    current_user
+  end
+
   private
 
-  def check_logged_in?
-    unless user_signed_in? && (current_user.role == "admin")
-      redirect_to root_path, notice: "You are not logged in or authorized"
-    end
+  def set_pundit_user
+    @pundit_user = current_user
   end
 end

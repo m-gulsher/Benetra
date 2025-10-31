@@ -7,18 +7,12 @@
       <span class="mr-2 text-4xl"><i class="bi bi-building text-lg"></i></span>
       Companies
     </h1>
-    <%= link_to new_company_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
-      <span class="mr-2 text-xl">+</span>
-      Add Company
+    <% if can?(:create, Company) %>
+      <%= link_to new_company_path, class: "rounded-lg py-3 px-5 bg-purple-500 text-white block font-medium" do %>
+        <span class="mr-2 text-xl">+</span>
+        Add Company
+      <% end %>
     <% end %>
-  </div>
-
-  <div class="bg-white mt-6 py-2 px-4 flex justify-between items-center">
-    <span class="text-sm text-gray-500">
-      <i class="bi bi-clock mr-2"></i>
-      Pending Invitations
-    </span>
-    <span class="text-lg font-semibold">4</span>
   </div>
 
   <%= form_with url: companies_path, method: :get, local: true, class: "mt-6 flex justify-end items-center gap-4" do |f| %>
@@ -39,8 +33,8 @@
     </div>
   <% end %>
 
-  <div class="mt-6 overflow-x-auto"> <!-- Add overflow-x-auto here to allow horizontal scroll -->
-    <table class="w-full min-w-max border border-collapse table-auto"> <!-- Ensure the table has a min-width -->
+  <div class="mt-6 overflow-x-auto">
+    <table class="w-full min-w-max border border-collapse table-auto">
       <thead class="bg-gray-100">
         <tr>
           <th class="border px-4 py-2 text-left">Name</th>
@@ -60,11 +54,15 @@
             <td class="border px-4 py-2"><%= company.poc_email %></td>
             <td class="border px-4 py-2"><%= company.employees.count %></td>
             <td class="border px-4 py-2 text-center flex justify-start items-center">
-              <%= link_to edit_company_path(company), class: "text-gray-500 hover:text-gray-700 mr-3", title: "Edit" do %>
-                <i class="bi bi-pencil"></i>
+              <% if can?(:edit, company) %>
+                <%= link_to edit_company_path(company), class: "text-gray-500 hover:text-gray-700 mr-3", title: "Edit" do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
               <% end %>
-              <%= button_to company_path(company), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-gray-500 hover:text-gray-700", title: "Delete" do %>
-                <i class="bi bi-trash"></i>
+              <% if can?(:destroy, company) %>
+                <%= button_to company_path(company), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-gray-500 hover:text-gray-700", title: "Delete" do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
               <% end %>
             </td>
           </tr>
